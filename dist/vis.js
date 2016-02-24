@@ -9417,7 +9417,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 12 */
 /***/ function(module, exports) {
 
-  
+
   /**
    * Expose `Emitter`.
    */
@@ -14732,10 +14732,10 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 26 */
 /***/ function(module, exports) {
 
-  
+
   /**
    * used in Core to convert the options into a volatile variable
-   * 
+   *
    * @param {function} moment
    * @param {Object} body
    * @param {Array | Object} hiddenDates
@@ -33349,18 +33349,18 @@ return /******/ (function(modules) { // webpackBootstrap
       key: 'drawArrowHead',
       value: function drawArrowHead(ctx, selected, hover, arrowData) {
 
-        var shape = this.options.arrows[arrowData.type].shape;
-
         // set style
         ctx.strokeStyle = this.getColor(ctx, selected, hover);
         ctx.fillStyle = ctx.strokeStyle;
         ctx.lineWidth = this.getLineWidth(selected, hover);
 
-        if (typeof shape === 'undefined') {
+        var shape = this.options.arrows[arrowData.type].shape;
+        if ( (typeof shape === 'undefined') || (typeof ctx[shape] === 'undefined') ) {
           // draw arrow at the end of the line
           ctx.arrow(arrowData.point.x, arrowData.point.y, arrowData.angle, arrowData.length);
         } else {
-          shape(ctx, selected, hover, arrowData);
+					// draw custom arrow at the end of the line
+          (ctx[shape])(selected, hover, arrowData);
         }
 
         // draw shadow if enabled
@@ -44924,7 +44924,7 @@ return /******/ (function(modules) { // webpackBootstrap
       }
 
       /**
-       * @param {string} url                      The Url to cache the image as 
+       * @param {string} url                      The Url to cache the image as
         * @return {Image} imageToLoadBrokenUrlOn  The image object
        */
 
@@ -44987,7 +44987,7 @@ return /******/ (function(modules) { // webpackBootstrap
           value: function load(url, brokenUrl, id) {
               var _this2 = this;
 
-              //Try and get the image from the cache, if successful then return the cached image  
+              //Try and get the image from the cache, if successful then return the cached image
               var cachedImage = this.images[url];
               if (cachedImage) return cachedImage;
 
