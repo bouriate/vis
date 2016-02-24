@@ -5,7 +5,7 @@
  * A dynamic, browser-based visualization library.
  *
  * @version 4.15.1-SNAPSHOT
- * @date    2016-02-23
+ * @date    2016-02-24
  *
  * @license
  * Copyright (C) 2011-2016 Almende B.V, http://almende.com
@@ -33335,7 +33335,7 @@ return /******/ (function(modules) { // webpackBootstrap
         var yi = arrowPoint.y - length * 0.9 * Math.sin(angle);
         var arrowCore = { x: xi, y: yi };
 
-        return { point: arrowPoint, core: arrowCore, angle: angle, length: length };
+        return { point: arrowPoint, type: position, core: arrowCore, angle: angle, length: length };
       }
 
       /**
@@ -33348,13 +33348,20 @@ return /******/ (function(modules) { // webpackBootstrap
     }, {
       key: 'drawArrowHead',
       value: function drawArrowHead(ctx, selected, hover, arrowData) {
+
+        var shape = this.options.arrows[arrowData.type].shape;
+
         // set style
         ctx.strokeStyle = this.getColor(ctx, selected, hover);
         ctx.fillStyle = ctx.strokeStyle;
         ctx.lineWidth = this.getLineWidth(selected, hover);
 
-        // draw arrow at the end of the line
-        ctx.arrow(arrowData.point.x, arrowData.point.y, arrowData.angle, arrowData.length);
+        if (typeof shape === 'undefined') {
+          // draw arrow at the end of the line
+          ctx.arrow(arrowData.point.x, arrowData.point.y, arrowData.angle, arrowData.length);
+        } else {
+          shape(ctx, selected, hover, arrowData);
+        }
 
         // draw shadow if enabled
         this.enableShadow(ctx);
