@@ -31439,9 +31439,9 @@ return /******/ (function(modules) { // webpackBootstrap
       this.options = {};
       this.defaultOptions = {
         arrows: {
-          to: { enabled: false, scaleFactor: 1 }, // boolean / {arrowScaleFactor:1} / {enabled: false, arrowScaleFactor:1}
-          middle: { enabled: false, scaleFactor: 1 },
-          from: { enabled: false, scaleFactor: 1 }
+          to: { enabled: false, scaleFactor: 1, shape: null }, // boolean / {arrowScaleFactor:1} / {enabled: false, arrowScaleFactor:1}
+          middle: { enabled: false, scaleFactor: 1, shape: null },
+          from: { enabled: false, scaleFactor: 1, shape: null }
         },
         arrowStrikethrough: true,
         color: {
@@ -32324,7 +32324,7 @@ return /******/ (function(modules) { // webpackBootstrap
         var allowDeletion = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
         var globalOptions = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
 
-        var fields = ['arrowStrikethrough', 'id', 'from', 'hidden', 'hoverWidth', 'label', 'labelHighlightBold', 'length', 'line', 'opacity', 'physics', 'scaling', 'selectionWidth', 'selfReferenceSize', 'to', 'title', 'value', 'width'];
+        var fields = ['arrowStrikethrough', 'id', 'from', 'hidden', 'hoverWidth', 'label', 'labelHighlightBold', 'length', 'line', 'opacity', 'physics', 'scaling', 'selectionWidth', 'selfReferenceSize', 'to', 'title', 'value', 'width', 'shape'];
 
         // only deep extend the items in the field array. These do not have shorthand.
         util.selectiveDeepExtend(fields, parentOptions, newOptions, allowDeletion);
