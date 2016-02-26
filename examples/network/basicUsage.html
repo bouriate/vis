@@ -11,8 +11,16 @@
 		body {
 			padding: 0px;
 			margin: 0px;
-			background: #596678 url(img/blueprint-7.png);
+			// url(/images/blueprint-7.png);
 			// 596678, 368dce, 13a65a, 45b696, e36761, e3624d, fcc458, 90bbdc
+		}
+		#blueprint-box {
+			background-color: #596678;
+			position: absolute;
+			top: 0px; left: 0px;
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
 		}
 		#mynetwork {
 			position: absolute;
@@ -25,10 +33,24 @@
 </head>
 <body>
 
+<div id="blueprint-box">
+	<canvas id="blueprint-canvas"></canvas>
+</div>
+
 <div id="mynetwork"></div>
 
 <script type="text/javascript">
 
+var bcanvas = document.getElementById('blueprint-canvas');
+bcanvas.width = $("#blueprint-box").width();
+bcanvas.height = $("#blueprint-box").height();
+
+var bctx = bcanvas.getContext('2d');
+
+window.addEventListener('resize', function() {
+	bcanvas.width = $("#blueprint-box").width();
+	bcanvas.height = $("#blueprint-box").height();
+});
 
 CanvasRenderingContext2D.prototype.customCircle = function (selected, hover, arrowData) {
 	var a = arrowData.angle + Math.PI/4;
@@ -57,7 +79,7 @@ CanvasRenderingContext2D.prototype.customDiamond = function(selected, hover, arr
     {id: 4, label: 'Железо', group: 'g2'},
     {id: 5, label: 'Огонь', group: 'g2'},
     {id: 6, label: 'Соль', group: 'g3'}, **/
-    {id: 1, fixed: true,label: '               ',  group: 'g3', shape: 'database'}
+    {id: 1, fixed: true, x:0, y:0, group: 'g3', shape: 'dot'}
   ]);
 
 
@@ -157,8 +179,7 @@ CanvasRenderingContext2D.prototype.customDiamond = function(selected, hover, arr
 function addRandomNode(x,y,isfixed) {
 	var id = vis.util.randomUUID();
 
-  if (nodes.length>50 || Math.random()<1/3) {
-		console.log(nodes.length, edges.length);
+  if (nodes.length>10 || Math.random()<1/3) {
 		var did = pickRandomProperty(nodes._data, '1');
 		var edges2remove = network.nodesHandler.getConnectedEdges(did);
 	//	network.nodesHandler.remove([did]);
@@ -221,7 +242,57 @@ function addRandomNode(x,y,isfixed) {
 		}
 	});
 
-	setInterval( addRandomNode, 500 )
+	setInterval( addRandomNode, 1500 );
+
+
+
+	  network.on('beforeDrawing', function(a,b) {
+
+		var height = bcanvas.height;
+		var width = bcanvas.width;
+		bctx.clearRect(0, 0, width, height)
+
+	  var vPosition = network.getViewPosition();
+		var scale = network.getScale();
+
+	    bctx.beginPath();
+			bctx.strokeStyle = '#368dce';
+			bctx.strokeWidth = 1;
+
+			var cellSize = 50 + ((50*scale)%50);
+			var hC = Math.floor(width/(2*cellSize));
+			var vC = Math.floor(height/(2*cellSize));
+
+			var x;
+			var y = height;
+			var left = width/2 - hC*cellSize - vPosition.x*scale%cellSize;
+			for (var i=-1; i<=2*hC+2; i++) {
+				x = left + i*cellSize;// + vPosition.x%cellSize;
+				bctx.moveTo( x, 0);
+				bctx.lineTo( x, y);
+			}
+
+			x = width;
+			var top = height/2 - vC*cellSize - vPosition.y*scale%cellSize;
+			for (var i=-1; i<=2*vC+2; i++) {
+				y = top + i*cellSize;// + vPosition.x%cellSize;
+				bctx.moveTo( 0, y);
+				bctx.lineTo( x, y);
+			}
+
+			/**
+			x = -width/2;
+			for (var i=0; i<=vC; i++) {
+				y = -height/2 + i*cellSize + vPosition.y*scale - vPosition.y%cellSize;
+				ctx.moveTo( x + vPosition.x*scale, y);
+				ctx.lineTo( -x + vPosition.x*scale, y);
+			} **/
+
+			bctx.stroke();
+
+	  })
+
+
 
 </script>
 
